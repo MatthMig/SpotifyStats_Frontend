@@ -31,7 +31,7 @@ const HomePage = () => {
                         setError('Failed to load Spotify data');
                     }
                 })
-                .catch(error => {
+                .catch(error => { // eslint-disable-line no-unused-vars
                     setError('Failed to connect to the server');
                     setLoading(false);
                 });
@@ -41,7 +41,13 @@ const HomePage = () => {
     return (
         <div>
             <h1>Welcome to the Homepage!</h1>
-            {loading ? <p>Loading Spotify data...</p> : error ? <p>{error}</p> : <p>Spotify data loaded!</p>}
+            {loading ? (
+                <p>Loading Spotify data...</p>
+            ) : error ? (
+                <p>Error: {error}</p>
+            ) : (
+                <p>Spotify data loaded!</p>
+            )}
         </div>
     );
 };
