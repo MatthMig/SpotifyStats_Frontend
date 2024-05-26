@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { Button, Card, Container } from 'react-bootstrap';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LandingPage.css';
+import '../styles/styles.css';
 
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 const clientId = '0bd99cd4322041fe9b87fc99fdea27cb';
@@ -12,6 +15,7 @@ const loginUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectU
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  //const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     // Get the hash from the URL
@@ -28,13 +32,20 @@ const LandingPage = () => {
 
     // If the hash contains an access token, store it and redirect to the homepage
     if (hash.access_token) {
-      localStorage.setItem('spotifyAuthToken', hash.access_token);
+      sessionStorage.setItem('spotifyAuthToken', hash.access_token);
       navigate('/home');
     }
+
+    const storedNotification = localStorage.getItem('notification');
+    if (storedNotification) {
+      NotificationManager.warning(storedNotification, 'Warning', 5000);
+      localStorage.removeItem('notification');
+    }
   }, [navigate]);
-  
+
   return (
-    <Container fluid className="LandingPage-container">
+    <Container fluid className="LandingPage-container vert-horiz-centered">
+      <NotificationContainer/>
       <Card className="text-center LandingPage-card">
         <Card.Body>
           <Card.Title><h1>Welcome to SpotifyStats!</h1></Card.Title>
