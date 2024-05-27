@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import 'react-bootstrap/dist/react-bootstrap.min.js';
 import { useNavigate } from 'react-router-dom';
+import { fetchUserData } from '../api_caller';
+import '../styles/HomePage.css';
 import '../styles/styles.css';
 
 const HomePage = () => {
@@ -15,13 +17,7 @@ const HomePage = () => {
         if (!storedToken) {
             navigate('/');
         } else {
-            fetch(`${process.env.REACT_APP_BACKEND_URL}/spotify/fetchUserData`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${storedToken}`
-                }
-            })
+            fetchUserData(storedToken)
                 .then(response => {
                     if (response.status === 401) {
                         sessionStorage.removeItem('spotifyAuthToken');
@@ -42,14 +38,14 @@ const HomePage = () => {
     }, [navigate]);
 
     return (
-        <div>
-            <h1>Welcome to the Homepage!</h1>
+        <div className="home-page">
+            {!loading && <h1>Welcome to the Homepage!</h1>}
             {loading ? (
-                <div className='vert-horiz-centered' style={{ flexDirection: 'column' }}>
-                    <Spinner animation="border" role="status">
+                <div className='loading-container'>
+                    <Spinner animation="border" role="status" className="loading-spinner">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
-                    <p>Spotify data are loading...</p>
+                    <p className="loading-text">Spotify data are loading...</p>
                 </div>
             ) : error ? (
                 <p>Error: {error}</p>
