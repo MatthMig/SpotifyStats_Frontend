@@ -1,0 +1,15 @@
+@startuml test
+class User {
+    +String username
+    +String password
+    +void changePassword(String newPassword)
+}
+
+class Post {
+    +String title
+    +String content
+    +Date dateCreated
+}
+
+User "1" -- "0..*" Post : creates
+@enduml

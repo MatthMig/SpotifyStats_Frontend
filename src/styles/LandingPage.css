@@ -1,6 +1,7 @@
 .LandingPage-container {
   background: linear-gradient(120deg, #0e5cda 0%, #479487 100%);
   font-family: "Roboto", sans-serif;
+  align-items: center;
 }
 
 .LandingPage-card {

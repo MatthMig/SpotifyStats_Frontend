@@ -9,7 +9,10 @@ import '../styles/styles.css';
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 const clientId = '0bd99cd4322041fe9b87fc99fdea27cb';
 const redirectUri = 'http://localhost:3000/';
-const scopes = ['user-library-read'];
+const scopes = [
+  'user-library-read',
+  'user-read-playback-state'
+];
 
 const loginUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 
@@ -36,15 +39,15 @@ const LandingPage = () => {
       navigate('/home');
     }
 
-    const storedNotification = localStorage.getItem('notification');
+    const storedNotification = sessionStorage.getItem('notification');
     if (storedNotification) {
       NotificationManager.warning(storedNotification, 'Warning', 5000);
-      localStorage.removeItem('notification');
+      sessionStorage.removeItem('notification');
     }
   }, [navigate]);
 
   return (
-    <Container fluid className="LandingPage-container vert-horiz-centered">
+    <Container fluid className="LandingPage-container page">
       <NotificationContainer/>
       <Card className="text-center LandingPage-card">
         <Card.Body>
