@@ -17,7 +17,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "set REACT_APP_BACKEND_URL=http://localhost:5000&& npm run start",
+    "dev": "set REACT_APP_BACKEND_URL=http://localhost:8080&& npm run start",
     "build": "react-scripts build",
     "test": "set REACT_APP_BACKEND_URL=http://localhost:8080&&cypress run --component",
     "eject": "react-scripts eject",

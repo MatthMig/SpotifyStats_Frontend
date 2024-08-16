@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPlaylists } from '../api_caller';
-import { LoadAnimation } from './LoadAnimation';
+import { LoadAnimation } from './generic/LoadAnimation';
 
 const PlaylistsOverview = () => {
   const [playlists, setPlaylists] = useState([]);
@@ -10,7 +9,7 @@ const PlaylistsOverview = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchPlaylists();
+        const data = [];
         setPlaylists(data);
         setLoading(false);
       } catch (error) {

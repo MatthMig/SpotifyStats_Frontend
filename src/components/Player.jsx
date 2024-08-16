@@ -21,8 +21,8 @@ const Player = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Player</h1>
+        <div className="player">
+            <h4>Player</h4>
             {isActive ? (
                     <p>The player is active</p>
                 ) : (

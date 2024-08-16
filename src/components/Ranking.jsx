@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchRanking } from '../api_caller';
-import { LoadAnimation } from './LoadAnimation';
+import { LoadAnimation } from './generic/LoadAnimation';
 
 const Ranking = () => {
   const [tracks, setTracks] = useState([]);
@@ -10,7 +9,7 @@ const Ranking = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchRanking();
+        const data = [];
         setTracks(data);
         setLoading(false);
       } catch (error) {

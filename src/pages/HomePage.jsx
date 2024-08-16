@@ -6,28 +6,28 @@ import MostPlayedSongsRecently from '../components/MostPlayedSongsRecently';
 import Player from '../components/Player';
 import PlaylistsOverview from '../components/PlaylistsOverview';
 import Ranking from '../components/Ranking';
-import { TopBar } from '../components/TopBar';
+import { TopBar } from '../components/generic/TopBar';
 import '../styles/HomePage.css';
 import '../styles/styles.css';
 
 const HomePage = () => {
     return (
-        <div className="page">
+        <div className="page d-flex flex-column min-vh-100">
             <TopBar />
             <Container fluid className="home-page">
-                <Row noGutters className='row'>
-                    <Col xs={12} md={4}>
+                <Row nogutters className='row h-100'>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto">
                         <MostPlayedSongsRecently />
                     </Col>
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto">
                         <Ranking />
                     </Col>
-                    <Col xs={12} md={4}>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto">
                         <PlaylistsOverview />
                     </Col>
                 </Row>
             </Container>
-            <Player />
+            <Player className="mt-auto" />
         </div>
     );
 };

@@ -10,7 +10,6 @@ export const TopBar = () => {
                 <Nav className="mr-auto">
                     <Nav.Link as={Link} to="/home">Home</Nav.Link>
                     <Nav.Link as={Link} to="/ranker">Ranker</Nav.Link>
-                    <Nav.Link as={Link} to="/tops">Tops</Nav.Link>
                     <Nav.Link as={Link} to="/playlists">Playlists</Nav.Link>
                     <Nav.Link as={Link} to="/settings">Settings</Nav.Link>
                 </Nav>
