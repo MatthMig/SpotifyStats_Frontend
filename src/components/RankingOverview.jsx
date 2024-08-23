@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchUserSongRankings } from '../api_caller';
 import { LoadAnimation } from './generic/LoadAnimation';
 
-const RankingOverview = ({ timeRange }) => {
+const RankingOverview = () => {
     const [tracks, setTracks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -30,7 +30,7 @@ const RankingOverview = ({ timeRange }) => {
             }
 
             try {
-                const response = await fetchUserSongRankings(token, timeRange);
+                const response = await fetchUserSongRankings(token);
                 if (!response.ok) {
                     if (response.status === 401) {
                         sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
@@ -51,7 +51,7 @@ const RankingOverview = ({ timeRange }) => {
         };
 
         fetchData();
-    }, [navigate, timeRange]);
+    }, [navigate]);
 
     if (error) {
         return (

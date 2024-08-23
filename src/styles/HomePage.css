@@ -61,6 +61,8 @@
 .column-view {
   margin: 0px !important;
   padding: 5px !important;
+  display: flex;
+  flex-direction: column;
 }
 
 .track-name {

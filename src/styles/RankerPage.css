@@ -1,0 +1,14 @@
+.ranker-page {
+    width: 100%;
+}
+
+.song-to-rank {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .song-to-rank {
+        flex: 1;
+    }
+}
