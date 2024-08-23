@@ -10,12 +10,14 @@
   justify-content: center;
   background: linear-gradient(120deg, #0e5cda 0%, #479487 100%);
   flex-grow: 1;
-  overflow: hidden; /* Prevent container scrolling */
+  overflow-x: auto; /* Enable horizontal scrolling */
   margin: 0 !important;
+  padding: 0 !important;
+  scrollbar-color: #36a38a #f1f1f1;
 }
 
 .scrollable-div {
-  max-height: 400px; /* Set the maximum height */
+  height: 400px; /* Set the maximum height */
   overflow-y: auto; /* Enable vertical scrolling */
   background-color: white;
 }
@@ -24,10 +26,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.text-right {
-  text-align: right;
 }
 
 .page {
@@ -46,28 +44,43 @@
   display: flex;
   height: calc(100% - var(--player-height));
   width: 100%;
-}
-
-.col {
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
-
-.mt-auto {
-  margin-top: auto;
+  flex-wrap: nowrap; /* Prevent wrapping */
 }
 
 .column-title {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
-  margin-bottom: 10px !important;
+  margin-bottom: 5px !important;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.8em; 
 }
 
 .column-view {
   margin: 0px !important;
+  padding: 5px !important;
 }
 
 .track-name {
-    margin-right: auto;
+  margin-right: auto;
+}
+
+/* Reusable Classes */
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  flex: 0 0 32.8%;
+}
+
+.artist-name-solo {
+  text-align: left;
+  display: block;
+  width: 100%;
+}
+
+.artist-names {
+  text-align: right;
 }

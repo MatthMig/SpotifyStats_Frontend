@@ -2,14 +2,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import 'react-bootstrap/dist/react-bootstrap.min.js';
+import MostPlayedArtists from '../components/MostPlayedArtists'; // Import the new component
 import MostPlayedSongs from '../components/MostPlayedSongs';
-import RankingOverview from '../components/RankingOverview';
 import Player from '../components/generic/Player';
 import { TopBar } from '../components/generic/TopBar';
 import '../styles/HomePage.css';
 import '../styles/styles.css';
 
-const HomePage = () => {
+const TopsPage = () => {
     return (
         <div className="page d-flex flex-column min-vh-100">
             <TopBar />
@@ -19,10 +19,19 @@ const HomePage = () => {
                         <MostPlayedSongs timeRange="short_term" />
                     </Col>
                     <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
-                        <RankingOverview />
+                        <MostPlayedSongs timeRange="medium_term" />
+                    </Col>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
+                        <MostPlayedSongs timeRange="long_term" />
+                    </Col>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
+                        <MostPlayedArtists timeRange="short_term" />
+                    </Col>
+                    <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
+                        <MostPlayedArtists timeRange="medium_term" />
                     </Col>
                     <Col xs={12} md={4} className="d-flex flex-column overflow-auto">
-                        
+                        <MostPlayedArtists timeRange="long_term" />
                     </Col>
                 </Row>
             </Container>
@@ -31,4 +40,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default TopsPage;

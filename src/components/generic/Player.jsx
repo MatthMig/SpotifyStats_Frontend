@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchPlayerState } from '../api_caller';
+import { fetchPlayerState } from '../../api_caller';
 
 const Player = () => {
     const [ isActive, setIsActive ] = useState(false);

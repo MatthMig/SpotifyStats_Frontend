@@ -29,3 +29,19 @@
   justify-content: center;
   height: 100%;
 }
+
+.active-link {
+  background-color: #007bff !important; /* Change this color to your desired background color */
+  color: white !important; /* Ensure the text color contrasts with the background */
+  border-radius: 5px; /* Optional: Add rounded corners */
+  padding: 0.5rem 1rem; /* Optional: Add padding for better spacing */
+  font-weight: bold; /* Optional: Make the active link bold */
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Full viewport height */
+  text-align: center; /* Optional: Center text */
+}
