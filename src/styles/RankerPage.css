@@ -1,14 +1,44 @@
 .ranker-page {
     width: 100%;
+    padding: 0;
 }
 
 .song-to-rank {
     text-align: center;
-    margin-bottom: 20px;
 }
 
-@media (max-width: 768px) {
-    .song-to-rank {
-        flex: 1;
-    }
+.songs-to-rank-row.small {
+    height: 60px;
+}
+
+.songs-to-rank-row.wide {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the items vertically */
+    align-items: center; /* Center the items horizontally */
+}
+
+.songs-to-rank-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the items vertically */
+    align-items: center; /* Center the items horizontally */
+    padding-top: 6%; /* Adjust as needed */
+    padding-bottom: 6%; /* Adjust as needed */
+}
+
+.song-to-rank {
+    flex: 1;
+    width: 100%; /* Ensure the song takes full width */
+}
+
+.ranking-overview-col {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.ranking-overview-col > * {
+    flex: 1;
+    max-width: 1200px; /* Adjust as needed */
 }
