@@ -41,6 +41,16 @@ export const fetchUserSongRankings = (token) => {
   });
 }
 
+export const fetchUserPlaylists = (token) => {
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/user/playlists`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
+
 // Function to rank tracks by making an API call to the backend
 // Parameters:
 // - token: The authorization token for the API call
