@@ -1,7 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+import { rankTracks } from '../api_caller';
 import CommonLayout from '../components/generic/CommonLayout';
 import RankingOverview from '../components/RankingOverview';
 import '../styles/RankerPage.css';
@@ -29,10 +31,16 @@ SongsToRank.propTypes = {
     layout: PropTypes.string.isRequired
 };
 
-const WideScreenLayout = ({ songsToRank }) => (
+const WideScreenLayout = ({ songsToRank, loading, error }) => (
     <Row className="wide-screen-layout">
         <Col md={4} className="songs-to-rank-col">
-            <SongsToRank songsToRank={songsToRank} layout="wide" />
+            {loading ? (
+                <div>Loading...</div>
+            ) : error ? (
+                <div>Error: {error}</div>
+            ) : (
+                <SongsToRank songsToRank={songsToRank} layout="wide" />
+            )}
         </Col>
         <Col md={8}>
             <RankingOverview />
@@ -46,12 +54,20 @@ WideScreenLayout.propTypes = {
             name: PropTypes.string.isRequired,
             artists: PropTypes.arrayOf(PropTypes.string).isRequired
         })
-    ).isRequired
+    ).isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string
 };
 
-const SmallScreenLayout = ({ songsToRank }) => (
+const SmallScreenLayout = ({ songsToRank, loading, error }) => (
     <Col>
-        <SongsToRank songsToRank={songsToRank} layout="small" />
+        {loading ? (
+            <div>Loading...</div>
+        ) : error ? (
+            <div>Error: {error}</div>
+        ) : (
+            <SongsToRank songsToRank={songsToRank} layout="small" />
+        )}
         <Row>
             <Col className="ranking-overview-col">
                 <RankingOverview />
@@ -66,23 +82,47 @@ SmallScreenLayout.propTypes = {
             name: PropTypes.string.isRequired,
             artists: PropTypes.arrayOf(PropTypes.string).isRequired
         })
-    ).isRequired
+    ).isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string
 };
 
 const RankerPage = () => {
-    const [songsToRank] = useState([
-        { name: 'Dummy Song 1', artists: ['Artist 1'] },
-        { name: 'Dummy Song 2', artists: ['Artist 2'] }
-    ]);
+    const [songsToRank, setSongsToRank] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = sessionStorage.getItem('spotifyAuthToken'); // Retrieve token from session storage
+        if (!token) {
+          sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
+          navigate('/');
+          return;
+        }
+
+        const fetchSongsToRank = async () => {
+            try {
+                const response = await rankTracks(token);
+                setSongsToRank(response.data);
+                setLoading(false);
+            } catch (err) {
+                setError(err.message);
+                setLoading(false);
+            }
+        };
+
+        fetchSongsToRank();
+    }, [navigate]);
 
     return (
         <CommonLayout>
             <Container fluid className="ranker-page">
                 <div className="d-none d-md-block">
-                    <WideScreenLayout songsToRank={songsToRank} />
+                    <WideScreenLayout songsToRank={songsToRank} loading={loading} error={error} />
                 </div>
                 <div className="d-block d-md-none">
-                    <SmallScreenLayout songsToRank={songsToRank} />
+                    <SmallScreenLayout songsToRank={songsToRank} loading={loading} error={error} />
                 </div>
             </Container>
         </CommonLayout>

@@ -32,7 +32,7 @@ export const fetchMostPlayedArtists = (token, time_range) => {
 };
 
 export const fetchUserSongRankings = (token) => {
-  return fetch(`${process.env.REACT_APP_BACKEND_URL}/ranking`, {
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/user/ranking`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -40,3 +40,39 @@ export const fetchUserSongRankings = (token) => {
     }
   });
 }
+
+// Function to rank tracks by making an API call to the backend
+// Parameters:
+// - token: The authorization token for the API call
+// - unrankedTrackId: The ID of the track that is currently unranked (optional)
+// - preference: The user's preference for ranking (e.g., 'unranked' or 'ranked') (optional)
+// - left: The left boundary index for the dichotomy search (optional)
+// - right: The right boundary index for the dichotomy search (optional)
+// - mid: The middle index for the dichotomy search (optional)
+export const rankTracks = async (token, unrankedTrackId, preference, left, right, mid) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/rank-tracks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        unrankedTrackId,
+        preference,
+        left,
+        right,
+        mid
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to rank tracks');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error ranking tracks:', error);
+    throw error;
+  }
+};
