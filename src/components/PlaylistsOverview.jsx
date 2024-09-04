@@ -30,39 +30,33 @@ const PlaylistsOverview = () => {
         return playlists;
     };
 
-    const fetchAndCompareTracks = async (token, playlistId) => {
-        const fetchTracks = async () => {
-            const { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData } = await fetchRecentAddedRemovedTracks(token, playlistId);
-            return { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData };
-        };
-
-        let previousTracksInfo = await fetchTracks();
-        setTracksInfo(prev => ({
-            ...prev,
-            [playlistId]: previousTracksInfo
-        }));
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        let currentTracksInfo = await fetchTracks();
-        setTracksInfo(prev => ({
-            ...prev,
-            [playlistId]: currentTracksInfo
-        }));
-
-        while (previousTracksInfo.addedTracksCount !== currentTracksInfo.addedTracksCount ||
-            previousTracksInfo.removedTracksCount !== currentTracksInfo.removedTracksCount) {
-            previousTracksInfo = currentTracksInfo;
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            currentTracksInfo = await fetchTracks();
-            setTracksInfo(prev => ({
-                ...prev,
-                [playlistId]: currentTracksInfo
-            }));
-        }
+    const fetchTracks = async (token, playlistId) => {
+        const { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData } = await fetchRecentAddedRemovedTracks(token, playlistId);
+        return { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData };
     };
 
     useEffect(() => {
+        const fetchAndCompareTracks = async (token, playlistId) => {
+            const updateTracksInfo = async () => {
+                const tracksInfo = await fetchTracks(token, playlistId);
+                setTracksInfo(prev => ({
+                    ...prev,
+                    [playlistId]: tracksInfo
+                }));
+                return tracksInfo;
+            };
+
+            let previousTracksInfo = await updateTracksInfo();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            let currentTracksInfo = await updateTracksInfo();
+            while (previousTracksInfo.addedTracksCount === currentTracksInfo.addedTracksCount &&
+                previousTracksInfo.removedTracksCount === currentTracksInfo.removedTracksCount) {
+                previousTracksInfo = currentTracksInfo;
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                currentTracksInfo = await updateTracksInfo();
+            }
+        };
+
         const fetchData = async () => {
             const token = sessionStorage.getItem('spotifyAuthToken');
             if (!token) {
