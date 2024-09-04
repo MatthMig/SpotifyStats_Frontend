@@ -82,7 +82,9 @@ const MostPlayedSongs = ({ timeRange }) => {
 
   return (
     <div className="container column-view">
-      <h4 className="text-center text-light column-title">{getTitle(timeRange)}</h4>
+      <div className="tile">
+        <h4 className="text-center text-light column-title">{getTitle(timeRange)}</h4>
+      </div>
       <div className="scrollable-div list-group">
         {tracks.map((track, index) => (
           <div key={index} className="list-group-item d-flex justify-content-between align-items-center">

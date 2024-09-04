@@ -45,3 +45,7 @@
   height: 100%; /* Full viewport height */
   text-align: center; /* Optional: Center text */
 }
+
+.no-padding {
+  padding: 0 !important; /* Remove padding */
+}

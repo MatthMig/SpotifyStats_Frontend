@@ -70,8 +70,10 @@ const RankingOverview = () => {
     }
 
     return (
-        <div className="container column-view">
-            <h4 className="mb-4 text-center text-light column-title">Your tracks ranking</h4>
+        <div className="home-page container column-view">
+            <div className='tile'>
+                <h4 className="mb-4 text-center text-light column-title">Your tracks ranking</h4>
+            </div>
             <div className="scrollable-div list-group">
                 {tracks.length === 0 ? (
                     <div className="text-center text-muted">You do not have ranked any songs for the moment.</div>

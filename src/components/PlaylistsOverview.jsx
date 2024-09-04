@@ -77,8 +77,10 @@ const PlaylistsOverview = () => {
     }
 
     return (
-        <div className="container column-view">
-            <h4 className="mb-4 text-center text-light column-title">Your Playlists</h4>
+        <div className="home-page container column-view">
+            <div className='tile'>
+                <h4 className="mb-4 text-center text-light column-title">Your Playlists</h4>
+            </div>
             <div className="scrollable-div list-group">
                 {playlists.length === 0 ? (
                     <div className="text-center text-muted">You do not have any playlists for the moment.</div>

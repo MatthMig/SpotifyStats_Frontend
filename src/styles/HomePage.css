@@ -4,10 +4,11 @@
 
 .home-page {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* Align items to the top */
   background: linear-gradient(120deg, #0e5cda 0%, #479487 100%);
   flex-grow: 1;
   overflow-x: auto; /* Enable horizontal scrolling */
@@ -16,10 +17,18 @@
   scrollbar-color: #36a38a #f1f1f1;
 }
 
+.tile {
+  width: 100%;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1; /* Ensure the tile is above other content */
+}
+
 .scrollable-div {
-  height: 400px; /* Set the maximum height */
+  flex-grow: 1;
   overflow-y: auto; /* Enable vertical scrolling */
   background-color: white;
+  width: 100%;
 }
 
 .list-group-item {
@@ -55,7 +64,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 2.8em; 
+  max-height: 2.8em;
 }
 
 .column-view {
@@ -63,18 +72,18 @@
   padding: 5px !important;
   display: flex;
   flex-direction: column;
+  height: 100vh;
 }
 
 .track-name {
   margin-right: auto;
 }
 
-/* Reusable Classes */
 .flex-column {
   display: flex;
   flex-direction: column;
   padding: 0 !important;
-  flex: 0 0 32.8%;
+  flex: 0 0 33.3%;
 }
 
 .artist-name-solo {
@@ -85,4 +94,34 @@
 
 .artist-names {
   text-align: right;
+}
+
+.arrow-right {
+  position: fixed;
+  top: 50%;
+  left: 90%;
+  transform: translateY(-50%);
+  font-size: 3rem; /* Increase the size */
+  color: #000; /* Change color to black */
+  z-index: 1000;
+  cursor: pointer;
+  transition: opacity 0.3s, left 0.3s;
+  animation: beatFade 2s infinite;
+}
+
+.arrow-right.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes beatFade {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchPlayerState } from '../../api_caller';
 
 const Player = () => {
-    const [ isActive, setIsActive ] = useState(false);
+    const [isActive, setIsActive] = useState(false);
 
     useEffect(() => {
         const fetchAndLogPlayerState = async () => {
@@ -21,15 +21,17 @@ const Player = () => {
     }, []);
 
     return (
-        <div className="player">
-            <h4>Player</h4>
+        <>
             {isActive ? (
+                <div className="player">
+                    <h4>Player</h4>
                     <p>The player is active</p>
-                ) : (
-                    <p>The player is not active: Probably premium account required</p>
-                )
+                </div>
+            ) : (
+                <></>
+            )
             }
-        </div>
+        </>
     );
 };
 
