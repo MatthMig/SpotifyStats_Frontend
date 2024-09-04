@@ -4,7 +4,6 @@ import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import '../../styles/HomePage.css';
 import '../../styles/styles.css';
-import Player from './Player';
 import { TopBar } from './TopBar';
 
 const CommonLayout = ({ children }) => {
@@ -16,7 +15,6 @@ const CommonLayout = ({ children }) => {
                     {children}
                 </Row>
             </Container>
-            <Player className="mt-auto" />
         </div>
     );
 };

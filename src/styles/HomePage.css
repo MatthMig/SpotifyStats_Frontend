@@ -92,8 +92,12 @@
   width: 100%;
 }
 
-.artist-names {
+.artist-names, .artist-names-playlist {
   text-align: right;
+}
+
+.artist-names-playlist {
+  padding-right: 5px;
 }
 
 .arrow-right {
@@ -124,4 +128,31 @@
     transform: scale(1.1);
     opacity: 0.7;
   }
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 10; /* Ensure the modal overlay is above the tile */
+}
+
+.modal-90w {
+  max-width: 600px;
+}
+
+.tracks-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 60vh; /* Limit the height of the tracks list */
+  overflow-y: auto; /* Make the list scrollable if it overflows */
+}
+
+.track-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }

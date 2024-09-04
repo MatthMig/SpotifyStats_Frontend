@@ -14,7 +14,6 @@ export const TopBar = () => {
                     <Nav.Link as={Link} to="/ranker" className={location.pathname === '/ranker' ? 'active-link' : ''}>Ranker</Nav.Link>
                     <Nav.Link as={Link} to="/playlists" className={location.pathname === '/playlists' ? 'active-link' : ''}>Playlists</Nav.Link>
                     <Nav.Link as={Link} to="/tops" className={location.pathname === '/tops' ? 'active-link' : ''}>Tops</Nav.Link>
-                    <Nav.Link as={Link} to="/settings" className={location.pathname === '/settings' ? 'active-link' : ''}>Settings</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

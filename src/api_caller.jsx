@@ -86,3 +86,92 @@ export const rankTracks = async (token, unrankedTrackId, preference, left, right
     throw error;
   }
 };
+
+export const fetchAddedTracks = (token, playlist, last24Hours = false, offset = 0, limit = 50) => {
+  const url = new URL(`${process.env.REACT_APP_BACKEND_URL}/user/added-tracks`);
+  url.searchParams.append('playlist', playlist);
+  url.searchParams.append('last24Hours', last24Hours);
+  url.searchParams.append('offset', offset);
+  url.searchParams.append('limit', limit);
+
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
+export const fetchRemovedTracks = (token, playlist, last24Hours = false, offset = 0, limit = 50) => {
+  const url = new URL(`${process.env.REACT_APP_BACKEND_URL}/user/removed-tracks`);
+  url.searchParams.append('playlist', playlist);
+  url.searchParams.append('last24Hours', last24Hours);
+  url.searchParams.append('offset', offset);
+  url.searchParams.append('limit', limit);
+
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+};
+
+export const fetchRecentAddedRemovedTracks = async (token, playlist) => {
+  let addedTracksCount = 0;
+  let removedTracksCount = 0;
+  let addedOffset = 0;
+  let removedOffset = 0;
+  const limit = 50;
+  let hasMoreAddedTracks = true;
+  let hasMoreRemovedTracks = true;
+  let addedTracksData = [];
+  let removedTracksData = [];
+
+  try {
+    while (hasMoreAddedTracks || hasMoreRemovedTracks) {
+      const [addedResponse, removedResponse] = await Promise.all([
+        fetchAddedTracks(token, playlist, true, addedOffset, limit),
+        fetchRemovedTracks(token, playlist, true, removedOffset, limit)
+      ]);
+
+      if (!addedResponse.ok || !removedResponse.ok) {
+        throw new Error('Failed to fetch added or removed tracks');
+      }
+
+      const addedTracks = await addedResponse.json();
+      const removedTracks = await removedResponse.json();
+
+      console.log(addedTracks, removedTracks);
+
+      addedTracksCount += addedTracks.length;
+      removedTracksCount += removedTracks.length;
+
+      addedTracksData = [...addedTracksData, ...addedTracks];
+      removedTracksData = [...removedTracksData, ...removedTracks];
+
+      hasMoreAddedTracks = addedTracks.length === limit;
+      hasMoreRemovedTracks = removedTracks.length === limit;
+
+      if (hasMoreAddedTracks) {
+        addedOffset += limit;
+      }
+
+      if (hasMoreRemovedTracks) {
+        removedOffset += limit;
+      }
+    }
+
+    return {
+      addedTracksCount,
+      removedTracksCount,
+      addedTracksData,
+      removedTracksData
+    };
+  } catch (error) {
+    console.error('Error fetching recent added/removed tracks:', error);
+    throw error;
+  }
+};

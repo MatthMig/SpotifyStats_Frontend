@@ -1,27 +1,65 @@
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 import React, { useEffect, useState } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { fetchUserPlaylists } from '../api_caller'; // Assume this function exists
+import { fetchRecentAddedRemovedTracks, fetchUserPlaylists } from '../api_caller';
+import '../styles/HomePage.css'; // Import the CSS file
 import { LoadAnimation } from './generic/LoadAnimation';
 
 const PlaylistsOverview = () => {
     const [playlists, setPlaylists] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [tracksInfo, setTracksInfo] = useState({});
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [modalContent, setModalContent] = useState({ title: '', tracks: [] });
     const navigate = useNavigate();
 
     const convertPlaylistsData = (data) => {
         const playlists = data.map(playlist => ({
             id: playlist.id,
-            name: playlist.id === 'saved-tracks' ? '❤️ ' + playlist.name : playlist.name,
+            name: playlist.id.startsWith('saved-tracks') ? '❤️ ' + playlist.name : playlist.name,
             tracks: playlist.tracks.total
         }));
-    
-        const savedTracksPlaylist = playlists.find(playlist => playlist.id === 'saved-tracks');
+
+        const savedTracksPlaylist = playlists.find(playlist => playlist.id.startsWith('saved-tracks'));
         if (savedTracksPlaylist) {
-            return [savedTracksPlaylist, ...playlists.filter(playlist => playlist.id !== 'saved-tracks')];
+            return [savedTracksPlaylist, ...playlists.filter(playlist => !playlist.id.startsWith('saved-tracks'))];
         }
-    
+
         return playlists;
+    };
+
+    const fetchAndCompareTracks = async (token, playlistId) => {
+        const fetchTracks = async () => {
+            const { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData } = await fetchRecentAddedRemovedTracks(token, playlistId);
+            return { addedTracksCount, removedTracksCount, addedTracksData, removedTracksData };
+        };
+
+        let previousTracksInfo = await fetchTracks();
+        setTracksInfo(prev => ({
+            ...prev,
+            [playlistId]: previousTracksInfo
+        }));
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+
+        let currentTracksInfo = await fetchTracks();
+        setTracksInfo(prev => ({
+            ...prev,
+            [playlistId]: currentTracksInfo
+        }));
+
+        while (previousTracksInfo.addedTracksCount !== currentTracksInfo.addedTracksCount ||
+            previousTracksInfo.removedTracksCount !== currentTracksInfo.removedTracksCount) {
+            previousTracksInfo = currentTracksInfo;
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            currentTracksInfo = await fetchTracks();
+            setTracksInfo(prev => ({
+                ...prev,
+                [playlistId]: currentTracksInfo
+            }));
+        }
     };
 
     useEffect(() => {
@@ -47,9 +85,13 @@ const PlaylistsOverview = () => {
                 }
                 const data = await response.json();
                 const convertedData = convertPlaylistsData(data);
-                console.log('Converted playlists:', convertedData); // Log the converted data
                 setPlaylists(convertedData);
                 setLoading(false);
+
+                // Fetch added and removed tracks count for each playlist
+                for (const playlist of convertedData) {
+                    fetchAndCompareTracks(token, playlist.id);
+                }
             } catch (error) {
                 console.error('Error fetching playlists:', error); // Log the error
                 setError(error);
@@ -59,6 +101,15 @@ const PlaylistsOverview = () => {
 
         fetchData();
     }, [navigate]);
+
+    const openModal = (title, tracks) => {
+        setModalContent({ title, tracks });
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
 
     if (error) {
         return (
@@ -89,10 +140,57 @@ const PlaylistsOverview = () => {
                         <div key={index} className="list-group-item d-flex justify-content-between align-items-center">
                             <span className='playlist-name'>{playlist.name}</span>
                             <span className="text-muted text-right">{playlist.tracks} tracks</span>
+                            {tracksInfo[playlist.id] && (
+                                <span className="d-flex align-items-center">
+                                    <span
+                                        className="text-success mr-2"
+                                        onClick={() => openModal(`Added Tracks in last 24 hours - ${playlist.name}`, tracksInfo[playlist.id].addedTracksData)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        ⬆️ {tracksInfo[playlist.id].addedTracksCount}
+                                    </span>
+                                    <span
+                                        className="text-danger"
+                                        onClick={() => openModal(`Removed Tracks in last 24 hours - ${playlist.name}`, tracksInfo[playlist.id].removedTracksData)}
+                                        style={{ cursor: 'pointer' }}
+                                    >
+                                        ⬇️ {tracksInfo[playlist.id].removedTracksCount}
+                                    </span>
+                                </span>
+                            )}
                         </div>
                     ))
                 )}
             </div>
+            <Modal
+                show={modalIsOpen}
+                onHide={closeModal}
+                centered
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title"
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                        {modalContent.title}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ul className="tracks-list">
+                        {modalContent.tracks.map((track, index) => (
+                            <li key={index} className="track-item list-group-item d-flex justify-content-between align-items-center">
+                                <span className="badge bg-primary rounded-pill me-2">{index + 1}</span>
+                                <span className='track-name'>{track.name}</span>
+                                <span className="text-muted text-right artist-names-playlist">{track.artists.join(', ')}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={closeModal}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };
