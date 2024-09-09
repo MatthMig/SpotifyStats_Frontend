@@ -1,0 +1,56 @@
+.no-padding {
+  padding: 0 !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.squared-button {
+  border-radius: 0 !important; /* Remove any border-radius to make it squared */
+}
+
+.list-group {
+  background-color: white; /* Set the background color of the list to white */
+}
+
+.playlist-details {
+  width: 100%;
+}
+
+.playlist-title-tile {
+  background-color: #f8f9fa; /* Light gray background */
+  padding: 10px; /* Padding around the title */
+  margin: 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.grey-border, .playlist-title-tile {
+  border: 1px solid #d4d4d4;
+  border-radius: 0; /* Rounded corners */
+}
+
+.playlist-name {
+    padding-left: 10px;
+}
+
+.added-tracks .list-group-item {
+  background-color: #d4edda; /* Light green background */
+  border-color: #c3e6cb; /* Green border */
+}
+
+.removed-tracks .list-group-item {
+  background-color: #f8d7da; /* Light red background */
+  border-color: #f5c6cb; /* Red border */
+}
+
+.scrollable-list {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tracks-list {
+  flex-direction: column;
+  flex-grow: 1;
+  max-height: 100%;
+}

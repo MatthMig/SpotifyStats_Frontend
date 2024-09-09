@@ -144,8 +144,6 @@ export const fetchRecentAddedRemovedTracks = async (token, playlist) => {
       const addedTracks = await addedResponse.json();
       const removedTracks = await removedResponse.json();
 
-      console.log(addedTracks, removedTracks);
-
       addedTracksCount += addedTracks.length;
       removedTracksCount += removedTracks.length;
 

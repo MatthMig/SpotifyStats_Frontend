@@ -6,6 +6,5 @@ module.exports = defineConfig({
       framework: "create-react-app",
       bundler: "webpack",
     },
-    specPattern: 'tests/**/*.jsx', // Updated line
   },
 });

@@ -5,16 +5,28 @@
 .home-page {
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: flex-start; /* Align items to the top */
-  background: linear-gradient(120deg, #0e5cda 0%, #479487 100%);
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
   flex-grow: 1;
   overflow-x: auto; /* Enable horizontal scrolling */
   margin: 0 !important;
   padding: 0 !important;
   scrollbar-color: #36a38a #f1f1f1;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .tile {
@@ -40,8 +52,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  overflow: hidden; /* Prevent page scrolling */
+  max-height: 100vh;
 }
 
 .player {
@@ -72,7 +83,7 @@
   padding: 5px !important;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .track-name {
@@ -144,7 +155,7 @@
   max-width: 600px;
 }
 
-.tracks-list {
+.tracks-list-modal {
   list-style-type: none;
   padding: 0;
   margin: 0;

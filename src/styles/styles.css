@@ -31,11 +31,8 @@
 }
 
 .active-link {
-  background-color: #007bff !important; /* Change this color to your desired background color */
-  color: white !important; /* Ensure the text color contrasts with the background */
-  border-radius: 5px; /* Optional: Add rounded corners */
-  padding: 0.5rem 1rem; /* Optional: Add padding for better spacing */
-  font-weight: bold; /* Optional: Make the active link bold */
+  font-weight: bold;
+  color: #ffc107 !important; /* Bootstrap's warning color */
 }
 
 .centered-container {

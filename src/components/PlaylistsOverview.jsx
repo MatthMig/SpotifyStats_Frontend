@@ -49,8 +49,8 @@ const PlaylistsOverview = () => {
             let previousTracksInfo = await updateTracksInfo();
             await new Promise(resolve => setTimeout(resolve, 2000));
             let currentTracksInfo = await updateTracksInfo();
-            while (previousTracksInfo.addedTracksCount === currentTracksInfo.addedTracksCount &&
-                previousTracksInfo.removedTracksCount === currentTracksInfo.removedTracksCount) {
+            while (previousTracksInfo.addedTracksCount !== currentTracksInfo.addedTracksCount ||
+                previousTracksInfo.removedTracksCount !== currentTracksInfo.removedTracksCount) {
                 previousTracksInfo = currentTracksInfo;
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 currentTracksInfo = await updateTracksInfo();
@@ -169,12 +169,13 @@ const PlaylistsOverview = () => {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ul className="tracks-list">
+                    <ul className="tracks-list-modal">
                         {modalContent.tracks.map((track, index) => (
                             <li key={index} className="track-item list-group-item d-flex justify-content-between align-items-center">
-                                <span className="badge bg-primary rounded-pill me-2">{index + 1}</span>
                                 <span className='track-name'>{track.name}</span>
-                                <span className="text-muted text-right artist-names-playlist">{track.artists.join(', ')}</span>
+                                <span className="text-muted text-right artist-names-playlist">
+                                    {track.artists.map(artist => artist.name).join(', ')}
+                                </span>
                             </li>
                         ))}
                     </ul>

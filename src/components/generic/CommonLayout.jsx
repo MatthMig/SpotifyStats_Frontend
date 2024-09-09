@@ -11,7 +11,7 @@ const CommonLayout = ({ children }) => {
         <div className="page d-flex flex-column min-vh-100">
             <TopBar />
             <Container fluid className="home-page">
-                <Row className="flex-column flex-md-row h-100">
+                <Row className="flex-column flex-md-row h-100 no-margin">
                     {children}
                 </Row>
             </Container>
