@@ -22,10 +22,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "set REACT_APP_BACKEND_URL=https://spotify-stats-backend-3903b171ecdd.herokuapp.com&& react-scripts start",
-    "dev": "set REACT_APP_BACKEND_URL=http://localhost:8080&& npm run start",
+    "start": "cross-env REACT_APP_BACKEND_URL=https://spotify-stats-backend-3903b171ecdd.herokuapp.com REACT_APP_REDIRECT_URI=https://spoti-stati.netlify.app/ react-scripts start",
+    "dev": "cross-env REACT_APP_BACKEND_URL=http://localhost:8080 REACT_APP_REDIRECT_URI=http://localhost:3000/ react-scripts start",
     "build": "react-scripts build",
-    "test": "set REACT_APP_BACKEND_URL=http://localhost:8080&&cypress run --component",
+    "test": "cross-env REACT_APP_BACKEND_URL=http://localhost:8080 cypress run --component",
     "eject": "react-scripts eject",
     "lint": "eslint ."
   },
@@ -51,6 +51,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@cypress/react18": "^2.0.1",
     "@cypress/webpack-dev-server": "^3.11.0",
+    "cross-env": "^7.0.3",
     "cypress": "^13.10.0",
     "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^3.2.0",

@@ -8,7 +8,7 @@ import '../styles/styles.css';
 
 const authEndpoint = 'https://accounts.spotify.com/authorize';
 const clientId = '0bd99cd4322041fe9b87fc99fdea27cb';
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = process.env.REACT_APP_REDIRECT_URI || 'http://localhost:3000/';
 const scopes = [
   'user-top-read',
   'playlist-read-private',
