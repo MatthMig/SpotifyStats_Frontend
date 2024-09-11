@@ -5,7 +5,7 @@ import { AddedTracks, PlaylistDetailsTracks, RemovedTracks } from './PlaylistDet
 
 const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, onLoadMore, hasMore }) => (
     <div className='d-flex w-100'>
-        <Col md={4} className="no-padding d-flex list-group flex-grow-1">
+        <Col md={4} className="no-padding d-flex list-group bg-white squared-button">
             {playlists.map((playlist) => (
                 <button
                     key={playlist.id}
@@ -17,9 +17,9 @@ const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, track
                 </button>
             ))}
         </Col>
-        <Col md={8} className='no-padding'>
+        <Col md={8} className='no-padding d-flex flex-grow-1 flex-column'>
             {selectedPlaylist && (
-                <h3 className='playlist-title-tile text-center'>{selectedPlaylist.name}</h3>
+                <h3 className='playlist-title-tile text-center no-margin'>{selectedPlaylist.name}</h3>
             )}
             <Row className='no-margin'>
                 <Col className="no-padding">
