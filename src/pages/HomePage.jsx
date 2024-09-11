@@ -12,7 +12,7 @@ const HomePage = () => {
     return (
         <CommonLayout>
             <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
-                <MostPlayedSongs timeRange="short_term" />
+                <MostPlayedSongs timeRange="short_term" showArrow={false} />
             </Col>
             <Col xs={12} md={4} className="d-flex flex-column overflow-auto mb-3 mb-md-0">
                 <RankingOverview />

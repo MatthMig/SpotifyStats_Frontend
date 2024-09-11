@@ -10,28 +10,22 @@
   border-radius: 0 !important; /* Remove any border-radius to make it squared */
 }
 
-.list-group {
-  background-color: white; /* Set the background color of the list to white */
-}
-
 .playlist-details {
   width: 100%;
 }
 
 .playlist-title-tile {
   background-color: #f8f9fa; /* Light gray background */
-  padding: 10px; /* Padding around the title */
-  margin: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.grey-border, .playlist-title-tile {
+.grey-border,
+.playlist-title-tile {
   border: 1px solid #d4d4d4;
   border-radius: 0; /* Rounded corners */
 }
 
 .playlist-name {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 .added-tracks .list-group-item {
@@ -53,4 +47,27 @@
   flex-direction: column;
   flex-grow: 1;
   max-height: 100%;
+}
+
+.custom-link {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.custom-link:hover {
+  color: black;
+  background-color: #e2e6ea; /* Darker grey background */
+  text-decoration: none;
+}
+
+.list-group-item:hover {
+  color: black;
+  background-color: #e2e6ea; /* Darker grey background */
+}
+
+.list-group-item.active,
+.list-group-item.active:hover {
+  color: white;
+  background-color: #007bff; /* Bootstrap primary color */
 }

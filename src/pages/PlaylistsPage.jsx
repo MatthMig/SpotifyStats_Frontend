@@ -61,7 +61,7 @@ const PlaylistsPage = () => {
         return response.json();
     };
 
-        const fetchTracks = async (url, setTracks, setNextTracksUrl, setLoading, setError, append = false) => {
+    const fetchTracks = async (url, setTracks, setNextTracksUrl, setLoading, setError, append = false) => {
         setLoading(true);
         try {
             const token = sessionStorage.getItem('spotifyAuthToken');
@@ -75,12 +75,12 @@ const PlaylistsPage = () => {
             setLoading(false);
         }
     };
-    
+
     const handleSelectPlaylist = async (playlist) => {
         setSelectedPlaylist(playlist);
         await fetchTracks(playlist.tracks.href, setTracks, setNextTracksUrl, setLoading, setError);
     };
-    
+
     const handleLoadMore = async () => {
         if (!nextTracksUrl) return;
         await fetchTracks(nextTracksUrl, setTracks, setNextTracksUrl, setLoading, setError, true);
@@ -96,9 +96,11 @@ const PlaylistsPage = () => {
 
     if (loading && !selectedPlaylist) {
         return (
-            <div className="centered-container">
-                <LoadAnimation />
-            </div>
+            <CommonLayout>
+                <div className="centered-container">
+                    <LoadAnimation />
+                </div>
+            </CommonLayout>
         );
     }
 
@@ -114,7 +116,7 @@ const PlaylistsPage = () => {
                     hasMore={!!nextTracksUrl}
                 />
             </div>
-            <div className="d-block d-md-none">
+            <div className="d-block d-md-none no-padding">
                 <SmallScreenLayout
                     playlists={playlists}
                     onSelectPlaylist={handleSelectPlaylist}

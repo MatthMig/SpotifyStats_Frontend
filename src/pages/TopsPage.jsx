@@ -51,19 +51,19 @@ const SmallScreenLayout = () => (
             <MostPlayedSongs timeRange="short_term" />
         </Row>
         <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
-                <MostPlayedSongs timeRange="medium_term" />
+            <MostPlayedSongs timeRange="medium_term" />
         </Row>
         <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
-                <MostPlayedSongs timeRange="long_term" />
+            <MostPlayedSongs timeRange="long_term" />
         </Row>
         <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
-                <MostPlayedArtists timeRange="short_term" />
+            <MostPlayedArtists timeRange="short_term" />
         </Row>
         <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
-                <MostPlayedArtists timeRange="medium_term" />
+            <MostPlayedArtists timeRange="medium_term" />
         </Row>
         <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
-                <MostPlayedArtists timeRange="long_term" />
+            <MostPlayedArtists timeRange="long_term" />
         </Row>
     </div>
 );

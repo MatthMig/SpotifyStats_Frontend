@@ -21,14 +21,22 @@ const SongsToRank = ({ songsToRank, layout, token, left, right, onCardClick }) =
     };
 
     return layout === 'small' ? (
-        <Row>
-            <Col xs={6} md={4} onClick={() => handleCardClick(0)}>
-                <h5>{songsToRank[0].name}</h5>
-                <p>{songsToRank[0].artists.map(artist => artist.name).join(', ')}</p>
+        <Row className='no-margin'>
+            <Col xs={6} md={4}>
+                <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(0)}>
+                    <Card.Body className='text-center'>
+                        <Card.Title>{songsToRank[0].name}</Card.Title>
+                        <Card.Text>{songsToRank[0].artists.map(artist => artist.name).join(', ')}</Card.Text>
+                    </Card.Body>
+                </Card>
             </Col>
-            <Col xs={6} md={4} onClick={() => handleCardClick(1)}>
-                <h5>{songsToRank[1].name}</h5>
-                <p>{songsToRank[1].artists.map(artist => artist.name).join(', ')}</p>
+            <Col xs={6} md={4}>
+                <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(1)}>
+                    <Card.Body className='text-center'>
+                        <Card.Title>{songsToRank[1].name}</Card.Title>
+                        <Card.Text>{songsToRank[1].artists.map(artist => artist.name).join(', ')}</Card.Text>
+                    </Card.Body>
+                </Card>
             </Col>
         </Row>
     ) : (layout === 'wide' ? (
@@ -125,11 +133,8 @@ WideScreenLayout.propTypes = {
 const SmallScreenLayout = ({ songsToRank = [], loading, error, token, left, right, onCardClick }) => {
     const [reload, setReload] = useState(false);
 
-    const handleCardClick = async (songIndex) => {
+    const handleCardClick = async (unrankedTrack, comparisonTrack, newLeft, newRight) => {
         try {
-            const unrankedTrackId = songsToRank[songIndex].id;
-            const preference = songIndex === 0 ? 'unranked' : 'ranked';
-            const { unrankedTrack, comparisonTrack, left: newLeft, right: newRight } = await rankTracks(token, unrankedTrackId, preference, left, right);
             onCardClick(unrankedTrack, comparisonTrack, newLeft, newRight);
             setReload(!reload); // Toggle the reload state to trigger re-render
         } catch (error) {
@@ -138,21 +143,45 @@ const SmallScreenLayout = ({ songsToRank = [], loading, error, token, left, righ
     };
 
     return (
-        <Col>
-            {loading ? (
-                <div>Loading...</div>
-            ) : error ? (
-                <div>Error: {error}</div>
-            ) : (
-                <SongsToRank songsToRank={songsToRank} layout="small" token={token} left={left} right={right} onCardClick={handleCardClick} />
-            )}
-            <Row>
-                <Col>
-                    <RankingOverview />
-                </Col>
-            </Row>
-        </Col>
+        <div className='d-flex flex-column w-100'>
+            <Col className='d-flex flex-grow-1 flex-column'>
+                {loading ? (
+                    <div className="d-flex justify-content-center align-items-center h-100">
+                        <Spinner animation="border" variant="primary" />
+                    </div>
+                ) : error ? (
+                    <Alert variant="danger" className="mt-3">
+                        Error: {error}
+                    </Alert>
+                ) : (
+                    <SongsToRank songsToRank={songsToRank} layout="small" token={token} left={left} right={right} onCardClick={handleCardClick} />
+                )}
+            </Col>
+            <Col className='d-flex flex-grow-1'>
+                <RankingOverview key={reload} /> {/* Pass reload state as key to trigger re-render */}
+            </Col>
+        </div>
     );
+};
+
+SmallScreenLayout.propTypes = {
+    songsToRank: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string,
+            name: PropTypes.string,
+            artists: PropTypes.arrayOf(
+                PropTypes.shape({
+                    name: PropTypes.string
+                })
+            )
+        })
+    ).isRequired,
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.string,
+    token: PropTypes.string.isRequired,
+    left: PropTypes.number.isRequired,
+    right: PropTypes.number.isRequired,
+    onCardClick: PropTypes.func.isRequired
 };
 
 SmallScreenLayout.propTypes = {
@@ -221,7 +250,7 @@ const RankerPage = () => {
 
     return (
         <CommonLayout>
-            <Container fluid>
+            <Container fluid className='no-padding'>
                 <div className="d-none d-md-flex h-100">
                     <WideScreenLayout songsToRank={songsToRank} loading={loading} error={error} token={token} left={left} right={right} onCardClick={handleCardClick} />
                 </div>

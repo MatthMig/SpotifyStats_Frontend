@@ -1,35 +1,57 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { PlaylistDetailsTracks } from './PlaylistDetails';
+import { Alert, Card, Col, Row } from 'react-bootstrap';
+import { AddedTracks, PlaylistDetailsTracks, RemovedTracks } from './PlaylistDetails';
 
 const SmallScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, onLoadMore, hasMore }) => (
     <Col className="d-flex flex-column flex-grow-1">
-        <div className="list-group flex-grow-1">
+        <div className="list-group flex-grow-0 mb-3">
             {playlists.map((playlist) => (
                 <button
                     key={playlist.id}
-                    className="list-group-item list-group-item-action squared-button"
+                    className={`list-group-item list-group-item-action squared-button ${selectedPlaylist && selectedPlaylist.id === playlist.id ? 'active' : ''}`}
                     onClick={() => onSelectPlaylist(playlist)}
                 >
-                    <span>{playlist.name}</span>
+                    <span className="playlist-name">{playlist.name}</span>
                     <span className="text-muted text-right">{playlist.tracks.total} tracks</span>
                 </button>
             ))}
         </div>
-        <Row className="flex-grow-1 d-flex align-items-end">
-            <Col className="playlist-details-col playlist-name">
-                <div>
-                    {selectedPlaylist ? (
-                        <PlaylistDetailsTracks
-                            tracks={tracks}
-                            onLoadMore={onLoadMore}
-                            hasMore={hasMore}
-                        />
-                    ) : (
-                        <p>Please select a playlist to see the details.</p>
-                    )}
-                </div>
+        <Row className="flex-grow-1 d-flex flex-column justify-content-between no-margin">
+            <Col className="d-flex flex-column flex-grow-1">
+                {selectedPlaylist ? (
+                    <>
+                        <Card className="mb-3 flex-grow-1">
+                            <Card.Body className="d-flex flex-column">
+                                <PlaylistDetailsTracks
+                                    tracks={tracks}
+                                    onLoadMore={onLoadMore}
+                                    hasMore={hasMore}
+                                />
+                            </Card.Body>
+                        </Card>
+                        <Card className="mb-3 flex-grow-1">
+                            <Card.Body className="d-flex flex-column">
+                                <RemovedTracks
+                                    token={sessionStorage.getItem('spotifyAuthToken')}
+                                    playlistId={selectedPlaylist.id}
+                                />
+                            </Card.Body>
+                        </Card>
+                        <Card className="mb-3 flex-grow-1">
+                            <Card.Body className="d-flex flex-column">
+                                <AddedTracks
+                                    token={sessionStorage.getItem('spotifyAuthToken')}
+                                    playlistId={selectedPlaylist.id}
+                                />
+                            </Card.Body>
+                        </Card>
+                    </>
+                ) : (
+                    <Alert variant="info" className="m-3 text-center flex-grow-1">
+                        Please select a playlist to see the details.
+                    </Alert>
+                )}
             </Col>
         </Row>
     </Col>

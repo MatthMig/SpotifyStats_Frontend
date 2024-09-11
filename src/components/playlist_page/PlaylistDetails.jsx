@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Modal } from 'react-bootstrap';
 import { FaMusic } from 'react-icons/fa'; // Import an icon from react-icons
 import { fetchAddedTracks, fetchRemovedTracks } from '../../api_caller';
 
-const TrackList = ({ tracks, onLoadMore, hasMore, title, className }) => (
+const TrackList = ({ tracks, onLoadMore, hasMore, className }) => (
     <Col className={`d-flex tracks-list bg-white ${className}`}>
-        {title && <h4 className='playlist-title-tile text-center'>{title}</h4>}
         {tracks.length === 0 ? (
             <div className='text-center text-muted no-tracks'>
                 <br />
@@ -26,7 +25,7 @@ const TrackList = ({ tracks, onLoadMore, hasMore, title, className }) => (
             </ul>
         )}
         {hasMore && (
-            <Button onClick={onLoadMore} className="mt-3 no-margin">
+            <Button onClick={onLoadMore} className="no-margin">
                 Load More
             </Button>
         )}
@@ -47,98 +46,145 @@ TrackList.propTypes = {
     ).isRequired,
     onLoadMore: PropTypes.func,
     hasMore: PropTypes.bool,
-    title: PropTypes.string,
     className: PropTypes.string,
 };
 
-const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => (
-    <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} title={'Playlist Tracks'} />
-);
+const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
+    const TracksComponent = ({ token, playlistId }) => {
+        const [tracks, setTracks] = useState([]);
+        const [loading, setLoading] = useState(true);
+        const [error, setError] = useState(null);
+        const [showModal, setShowModal] = useState(false);
+        const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+        useEffect(() => {
+            const handleResize = () => {
+                setIsSmallScreen(window.innerWidth <= 768);
+            };
+
+            window.addEventListener('resize', handleResize);
+            return () => window.removeEventListener('resize', handleResize);
+        }, []);
+
+        useEffect(() => {
+            const fetchTracks = async () => {
+                try {
+                    const response = await fetchTracksFunc(token, playlistId, false);
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tracks');
+                    }
+                    const data = await response.json();
+                    setTracks(data);
+                } catch (error) {
+                    setError(error.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchTracks();
+        }, [token, playlistId]);
+
+        const handleShow = () => setShowModal(true);
+        const handleClose = () => setShowModal(false);
+
+        if (loading) {
+            return <p>Loading...</p>;
+        }
+
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+
+        return (
+            <>
+                {isSmallScreen ? (
+                    <>
+                        <Button variant="link" onClick={handleShow} className={`playlist-title-tile text-center w-100 custom-link ${linkClass}`}>
+                            {modalTitle}
+                        </Button>
+
+                        <Modal show={showModal} onHide={handleClose} size="lg">
+                            <Modal.Header closeButton>
+                                <Modal.Title>{modalTitle}</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <TrackList tracks={tracks} className={linkClass} />
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleClose}>
+                                    Close
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
+                ) : (
+                    <TrackList tracks={tracks} className={linkClass} />
+                )}
+            </>
+        );
+    };
+
+    TracksComponent.propTypes = {
+        token: PropTypes.string.isRequired,
+        playlistId: PropTypes.string.isRequired,
+    };
+
+    return TracksComponent;
+};
+
+const AddedTracks = withTracks(fetchAddedTracks, 'added-tracks green-link', 'Added Tracks');
+const RemovedTracks = withTracks(fetchRemovedTracks, 'removed-tracks red-link', 'Removed Tracks');
+
+const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => {
+    const [showModal, setShowModal] = useState(false);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth <= 768);
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const handleShow = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
+
+    return (
+        <>
+            {isSmallScreen ? (
+                <>
+                    <Button variant="link" onClick={handleShow} className="playlist-title-tile text-center w-100 custom-link">
+                        Playlist Tracks
+                    </Button>
+
+                    <Modal show={showModal} onHide={handleClose} size="lg">
+                        <Modal.Header closeButton>
+                            <Modal.Title>Playlist Tracks</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} />
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleClose}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>
+            ) : (
+                <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} />
+            )}
+        </>
+    );
+};
 
 PlaylistDetailsTracks.propTypes = {
     tracks: PropTypes.array.isRequired,
     onLoadMore: PropTypes.func.isRequired,
     hasMore: PropTypes.bool.isRequired,
-};
-
-const AddedTracks = ({ token, playlistId }) => {
-    const [tracks, setTracks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchTracks = async () => {
-            try {
-                const response = await fetchAddedTracks(token, playlistId, false);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch added tracks');
-                }
-                const data = await response.json();
-                setTracks(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTracks();
-    }, [token, playlistId]);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
-    return <TrackList tracks={tracks} title="Added Tracks" className="added-tracks" />;
-};
-
-AddedTracks.propTypes = {
-    token: PropTypes.string.isRequired,
-    playlistId: PropTypes.string.isRequired,
-};
-
-const RemovedTracks = ({ token, playlistId }) => {
-    const [tracks, setTracks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-
-    useEffect(() => {
-        const fetchTracks = async () => {
-            try {
-                const response = await fetchRemovedTracks(token, playlistId, false);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch removed tracks');
-                }
-                const data = await response.json();
-                setTracks(data);
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchTracks();
-    }, [token, playlistId]);
-
-    if (loading) {
-        return <p>Loading...</p>;
-    }
-
-    if (error) {
-        return <p>Error: {error}</p>;
-    }
-
-    return <TrackList tracks={tracks} title="Removed Tracks" className="removed-tracks" />;
-};
-
-RemovedTracks.propTypes = {
-    token: PropTypes.string.isRequired,
-    playlistId: PropTypes.string.isRequired,
 };
 
 export { AddedTracks, PlaylistDetailsTracks, RemovedTracks };
