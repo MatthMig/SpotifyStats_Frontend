@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserSongRankings } from '../api_caller';
 import { LoadAnimation } from './generic/LoadAnimation';
@@ -10,48 +9,46 @@ const RankingOverview = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const transformTrackData = (data) => {
-        if (!Array.isArray(data)) {
-            return [];
+    const fetchData = useCallback(async () => {
+        const token = sessionStorage.getItem('spotifyAuthToken');
+        if (!token) {
+            sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
+            navigate('/');
         }
-        return data.map(track => ({
-            id: track.id,
-            name: track.name,
-            artists: track.artists.map(artist => artist.name)
-        }));
-    };
+
+        try {
+            const response = await fetchUserSongRankings(token);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
+                    navigate('/');
+                } else if (response.status === 403) {
+                    throw new Error('Insufficent client scope');
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            }
+            const data = await response.json();
+            const tracks = data !== null ? (
+                data.map(item => ({
+                    id: item.track.id,
+                    name: item.track.name,
+                    artists: item.track.artists.map(artist => artist.name),
+                    rank: item.rank,
+                    imageUrl: item.track.image_url
+                }))
+            ) : [];
+            setTracks(tracks);
+            setLoading(false);
+        } catch (error) {
+            setError(error);
+            setLoading(false);
+        }
+    }, [navigate]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            const token = sessionStorage.getItem('spotifyAuthToken');
-            if (!token) {
-                sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
-                navigate('/');
-            }
-
-            try {
-                const response = await fetchUserSongRankings(token);
-                if (!response.ok) {
-                    if (response.status === 401) {
-                        sessionStorage.setItem('notification', 'Authentication expired. Please log in again.');
-                        navigate('/');
-                    } else if (response.status === 403) {
-                        throw new Error('Insufficent client scope');
-                    } else {
-                        throw new Error('Network response was not ok');
-                    }
-                }
-                const data = transformTrackData((await response.json()).items);
-                setTracks(data);
-                setLoading(false);
-            } catch (error) {
-                setError(error);
-                setLoading(false);
-            }
-        };
-
         fetchData();
-    }, [navigate]);
+    }, [fetchData, navigate]);
 
     if (error) {
         return (
@@ -82,17 +79,13 @@ const RankingOverview = () => {
                         <div key={index} className="list-group-item d-flex justify-content-between align-items-center">
                             <span className="badge bg-primary rounded-pill me-2">{index + 1}</span>
                             <span className='track-name'>{track.name}</span>
-                            <span className="text-muted text-right">{track.artists.join(', ')}</span>
+                            <span className="text-muted text-right artist-names-playlist">{track.artists.join(', ')}</span>
                         </div>
                     ))
                 )}
             </div>
         </div>
     );
-};
-
-RankingOverview.propTypes = {
-    timeRange: PropTypes.oneOf(['short_term', 'medium_term', 'long_term']).isRequired,
 };
 
 export default RankingOverview;

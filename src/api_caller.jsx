@@ -59,7 +59,7 @@ export const fetchUserPlaylists = (token) => {
 // - left: The left boundary index for the dichotomy search (optional)
 // - right: The right boundary index for the dichotomy search (optional)
 // - mid: The middle index for the dichotomy search (optional)
-export const rankTracks = async (token, unrankedTrackId, preference, left, right, mid) => {
+export const rankTracks = async (token, unrankedTrackId, preference, left, right) => {
   try {
     const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/user/rank-tracks`, {
       method: 'POST',
@@ -71,8 +71,7 @@ export const rankTracks = async (token, unrankedTrackId, preference, left, right
         unrankedTrackId,
         preference,
         left,
-        right,
-        mid
+        right
       })
     });
 

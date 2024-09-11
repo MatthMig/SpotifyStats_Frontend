@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Alert, Col, Row } from 'react-bootstrap';
 import { AddedTracks, PlaylistDetailsTracks, RemovedTracks } from './PlaylistDetails';
 
 const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, onLoadMore, hasMore }) => (
@@ -39,7 +39,9 @@ const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, track
                             </div>
                         </Col>
                     ) : (
-                        <p>Please select a playlist to see the details.</p>
+                        <Alert variant="info" className="m-3 text-center">
+                            Please select a playlist to see the details.
+                        </Alert>
                     )}
                 </Col>
                 <Col className='no-padding d-flex'>
