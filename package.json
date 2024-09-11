@@ -22,7 +22,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set REACT_APP_BACKEND_URL=https://spotify-stats-backend-3903b171ecdd.herokuapp.com&& react-scripts start",
     "dev": "set REACT_APP_BACKEND_URL=http://localhost:8080&& npm run start",
     "build": "react-scripts build",
     "test": "set REACT_APP_BACKEND_URL=http://localhost:8080&&cypress run --component",
