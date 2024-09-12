@@ -47,22 +47,22 @@ WideScreenLayout.propTypes = {
 
 const SmallScreenLayout = () => (
     <div className="small-screen-layout">
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedSongs timeRange="short_term" />
         </Row>
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedSongs timeRange="medium_term" />
         </Row>
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedSongs timeRange="long_term" />
         </Row>
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedArtists timeRange="short_term" />
         </Row>
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedArtists timeRange="medium_term" />
         </Row>
-        <Row xs={12} className="d-flex flex-column overflow-auto mb-3">
+        <Row xs={12} className="d-flex flex-column overflow-auto mb-3 no-margin">
             <MostPlayedArtists timeRange="long_term" />
         </Row>
     </div>

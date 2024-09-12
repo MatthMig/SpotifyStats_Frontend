@@ -64,7 +64,7 @@ const MostPlayedItems = ({ timeRange, fetchFunction, renderItem, getTitle, showA
 
   return (
     <Container className="column-view">
-      <Row className="tile align-items-center no-padding">
+      <Row className="tile align-items-center no-padding no-margin">
         <Col>
           <h4 className="text-center text-light column-title">
             {getTitle(timeRange)}
