@@ -4,11 +4,11 @@ import { Button, Col, Modal } from 'react-bootstrap';
 import { FaMusic } from 'react-icons/fa'; // Import an icon from react-icons
 import { fetchAddedTracks, fetchRemovedTracks } from '../../api_caller';
 
-const TrackList = ({ tracks, onLoadMore, hasMore, className }) => (
+const TrackList = ({ tracks, onLoadMore, hasMore, className, title }) => (
     <Col className={`d-flex tracks-list bg-white ${className}`}>
+        {title && <h3 className="tracks-title text-center no-margin">{title}</h3>}
         {tracks.length === 0 ? (
-            <div className='text-center text-muted no-tracks'>
-                <br />
+            <div className='text-center text-muted no-tracks mt-2'>
                 <FaMusic size={50} className='mb-3' />
                 <p className='no-margin'>No tracks found.</p>
             </div>
@@ -47,6 +47,7 @@ TrackList.propTypes = {
     onLoadMore: PropTypes.func,
     hasMore: PropTypes.bool,
     className: PropTypes.string,
+    title: PropTypes.string, // Add title prop type
 };
 
 const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
@@ -109,7 +110,7 @@ const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
                                 <Modal.Title>{modalTitle}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <TrackList tracks={tracks} className={linkClass} />
+                                <TrackList tracks={tracks} className={linkClass} title={modalTitle} />
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button variant="secondary" onClick={handleClose}>
@@ -119,7 +120,7 @@ const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
                         </Modal>
                     </>
                 ) : (
-                    <TrackList tracks={tracks} className={linkClass} />
+                    <TrackList tracks={tracks} className={linkClass} title={modalTitle} />
                 )}
             </>
         );
@@ -136,7 +137,7 @@ const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
 const AddedTracks = withTracks(fetchAddedTracks, 'added-tracks green-link', 'Added Tracks');
 const RemovedTracks = withTracks(fetchRemovedTracks, 'removed-tracks red-link', 'Removed Tracks');
 
-const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => {
+const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore, title }) => {
     const [showModal, setShowModal] = useState(false);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
 
@@ -157,7 +158,7 @@ const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => {
             {isSmallScreen ? (
                 <>
                     <Button variant="link" onClick={handleShow} className="playlist-title-tile text-center w-100 custom-link">
-                        Playlist Tracks
+                        {title}
                     </Button>
 
                     <Modal show={showModal} onHide={handleClose} size="lg">
@@ -165,7 +166,7 @@ const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => {
                             <Modal.Title>Playlist Tracks</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} />
+                            <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} title={title} />
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>
@@ -175,7 +176,7 @@ const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore }) => {
                     </Modal>
                 </>
             ) : (
-                <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} />
+                <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} title={title} />
             )}
         </>
     );
@@ -185,6 +186,7 @@ PlaylistDetailsTracks.propTypes = {
     tracks: PropTypes.array.isRequired,
     onLoadMore: PropTypes.func.isRequired,
     hasMore: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired
 };
 
 export { AddedTracks, PlaylistDetailsTracks, RemovedTracks };

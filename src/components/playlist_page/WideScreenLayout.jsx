@@ -3,13 +3,13 @@ import React from 'react';
 import { Alert, Col, Row } from 'react-bootstrap';
 import { AddedTracks, PlaylistDetailsTracks, RemovedTracks } from './PlaylistDetails';
 
-const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, onLoadMore, hasMore }) => (
+const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, duplicateTracks, onLoadMore, hasMore }) => (
     <div className='d-flex w-100'>
         <Col md={4} className="no-padding d-flex list-group bg-white squared-button">
             {playlists.map((playlist) => (
                 <button
                     key={playlist.id}
-                    className="list-group-item list-group-item-action squared-button"
+                    className={`list-group-item list-group-item-action squared-button ${selectedPlaylist && selectedPlaylist.id === playlist.id ? 'active' : ''}`}
                     onClick={() => onSelectPlaylist(playlist)}
                 >
                     <span className='playlist-name'>{playlist.name}</span>
@@ -18,9 +18,6 @@ const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, track
             ))}
         </Col>
         <Col md={8} className='no-padding d-flex flex-grow-1 flex-column'>
-            {selectedPlaylist && (
-                <h3 className='playlist-title-tile text-center no-margin'>{selectedPlaylist.name}</h3>
-            )}
             <Row className='no-margin'>
                 <Col className="no-padding">
                     {selectedPlaylist ? (
@@ -46,11 +43,26 @@ const WideScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, track
                 </Col>
                 <Col className='no-padding d-flex'>
                     {selectedPlaylist && (
-                        <PlaylistDetailsTracks
-                            tracks={tracks}
-                            onLoadMore={onLoadMore}
-                            hasMore={hasMore}
-                        />
+                        <Col className='h-100'>
+                            <div className={`${duplicateTracks.length > 0 ? 'h-50' : 'h-100'} grey-border bg-white`}>
+                                <PlaylistDetailsTracks
+                                    tracks={tracks}
+                                    onLoadMore={onLoadMore}
+                                    hasMore={hasMore}
+                                    title='Playlist Tracks'
+                                />
+                            </div>
+                            {duplicateTracks.length > 0 &&
+                                <div className='h-50 grey-border bg-white'>
+                                    <PlaylistDetailsTracks
+                                        tracks={duplicateTracks}
+                                        onLoadMore={null}
+                                        hasMore={null}
+                                        title='Duplicate Tracks'
+                                    />
+                                </div>
+                            }
+                        </Col>
                     )}
                 </Col>
             </Row>
@@ -71,6 +83,7 @@ WideScreenLayout.propTypes = {
     onSelectPlaylist: PropTypes.func.isRequired,
     selectedPlaylist: PropTypes.object,
     tracks: PropTypes.array.isRequired,
+    duplicateTracks: PropTypes.array,
     onLoadMore: PropTypes.func.isRequired,
     hasMore: PropTypes.bool.isRequired,
 };

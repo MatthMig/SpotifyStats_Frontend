@@ -49,6 +49,10 @@
   max-height: 100%;
 }
 
+.tracks-title {
+  border-bottom: 1px solid #d4d4d4;
+}
+
 .custom-link {
   color: black;
   font-weight: bold;
@@ -70,4 +74,8 @@
 .list-group-item.active:hover {
   color: white;
   background-color: #007bff; /* Bootstrap primary color */
+}
+
+.active .text-muted {
+  color: white !important; /* Override the muted color */
 }

@@ -21,9 +21,9 @@ const SongsToRank = ({ songsToRank, layout, token, left, right, onCardClick }) =
     };
 
     return layout === 'small' ? (
-        <Row className='no-margin'>
+        <Row className='row-tracks-to-rank'>
             <Col xs={6} md={4}>
-                <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(0)}>
+                <Card className="mb-3 w-100 clickable-card" onClick={() => handleCardClick(0)}>
                     <Card.Body className='text-center'>
                         <Card.Title>{songsToRank[0].name}</Card.Title>
                         <Card.Text>{songsToRank[0].artists.map(artist => artist.name).join(', ')}</Card.Text>
@@ -31,7 +31,7 @@ const SongsToRank = ({ songsToRank, layout, token, left, right, onCardClick }) =
                 </Card>
             </Col>
             <Col xs={6} md={4}>
-                <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(1)}>
+                <Card className="mb-3 w-100 clickable-card" onClick={() => handleCardClick(1)}>
                     <Card.Body className='text-center'>
                         <Card.Title>{songsToRank[1].name}</Card.Title>
                         <Card.Text>{songsToRank[1].artists.map(artist => artist.name).join(', ')}</Card.Text>

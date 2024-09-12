@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchUserPlaylists } from '../api_caller';
+import { fetchDuplicatePlaylistTracks, fetchUserPlaylists } from '../api_caller';
 import CommonLayout from '../components/generic/CommonLayout';
 import { LoadAnimation } from '../components/generic/LoadAnimation';
 import SmallScreenLayout from '../components/playlist_page/SmallScreenLayout';
@@ -12,6 +12,7 @@ const PlaylistsPage = () => {
     const [playlists, setPlaylists] = useState([]);
     const [selectedPlaylist, setSelectedPlaylist] = useState(null);
     const [tracks, setTracks] = useState([]);
+    const [duplicateTracks, setDuplicateTracks] = useState([]);
     const [nextTracksUrl, setNextTracksUrl] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -78,7 +79,15 @@ const PlaylistsPage = () => {
 
     const handleSelectPlaylist = async (playlist) => {
         setSelectedPlaylist(playlist);
+        const token = sessionStorage.getItem('spotifyAuthToken');
         await fetchTracks(playlist.tracks.href, setTracks, setNextTracksUrl, setLoading, setError);
+        const duplicates = await fetchDuplicatePlaylistTracks(token, playlist.id);
+        if (!duplicates.ok) {
+            console.error('Failed to fetch duplicate tracks:', duplicates.text());
+        } else {
+            const data = await duplicates.json();
+            setDuplicateTracks(data);
+        }
     };
 
     const handleLoadMore = async () => {
@@ -112,6 +121,7 @@ const PlaylistsPage = () => {
                     onSelectPlaylist={handleSelectPlaylist}
                     selectedPlaylist={selectedPlaylist}
                     tracks={tracks}
+                    duplicateTracks={duplicateTracks}
                     onLoadMore={handleLoadMore}
                     hasMore={!!nextTracksUrl}
                 />
@@ -122,6 +132,7 @@ const PlaylistsPage = () => {
                     onSelectPlaylist={handleSelectPlaylist}
                     selectedPlaylist={selectedPlaylist}
                     tracks={tracks}
+                    duplicateTracks={duplicateTracks}
                     onLoadMore={handleLoadMore}
                     hasMore={!!nextTracksUrl}
                 />

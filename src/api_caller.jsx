@@ -172,3 +172,13 @@ export const fetchRecentAddedRemovedTracks = async (token, playlist) => {
     throw error;
   }
 };
+
+export const fetchDuplicatePlaylistTracks = (token, playlist) => {
+  return fetch(`${process.env.REACT_APP_BACKEND_URL}/user/playlists/duplicates?playlist=${playlist}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+}
