@@ -110,7 +110,7 @@ const withTracks = (fetchTracksFunc, linkClass, modalTitle) => {
                                 <Modal.Title>{modalTitle}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <TrackList tracks={tracks} className={linkClass} title={modalTitle} />
+                                <TrackList tracks={tracks} className={linkClass} title={null} />
                             </Modal.Body>
                             <Modal.Footer>
                                 <Button variant="secondary" onClick={handleClose}>
@@ -166,7 +166,7 @@ const PlaylistDetailsTracks = ({ tracks, onLoadMore, hasMore, title }) => {
                             <Modal.Title>Playlist Tracks</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} title={title} />
+                            <TrackList tracks={tracks} onLoadMore={onLoadMore} hasMore={hasMore} title={null} />
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>

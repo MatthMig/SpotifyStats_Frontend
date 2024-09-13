@@ -3,7 +3,7 @@ import React from 'react';
 import { Alert, Card, Col, Row } from 'react-bootstrap';
 import { AddedTracks, PlaylistDetailsTracks, RemovedTracks } from './PlaylistDetails';
 
-const SmallScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, onLoadMore, hasMore }) => (
+const SmallScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, tracks, duplicateTracks, onLoadMore, hasMore }) => (
     <Col className="d-flex flex-column flex-grow-1">
         <div className="list-group flex-grow-0 mb-3">
             {playlists.map((playlist) => (
@@ -27,6 +27,7 @@ const SmallScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, trac
                                     tracks={tracks}
                                     onLoadMore={onLoadMore}
                                     hasMore={hasMore}
+                                    title='Playlist Tracks'
                                 />
                             </Card.Body>
                         </Card>
@@ -46,6 +47,18 @@ const SmallScreenLayout = ({ playlists, onSelectPlaylist, selectedPlaylist, trac
                                 />
                             </Card.Body>
                         </Card>
+                        {duplicateTracks.length > 0 && (
+                            <Card className="mb-3 flex-grow-1">
+                                <Card.Body className="d-flex flex-column">
+                                    <PlaylistDetailsTracks
+                                        tracks={duplicateTracks}
+                                        onLoadMore={null}
+                                        hasMore={null}
+                                        title='Duplicate Tracks'
+                                    />
+                                </Card.Body>
+                            </Card>
+                        )}
                     </>
                 ) : (
                     <Alert variant="info" className="m-3 text-center flex-grow-1">
@@ -70,6 +83,7 @@ SmallScreenLayout.propTypes = {
     onSelectPlaylist: PropTypes.func.isRequired,
     selectedPlaylist: PropTypes.object,
     tracks: PropTypes.array.isRequired,
+    duplicateTracks: PropTypes.array,
     onLoadMore: PropTypes.func.isRequired,
     hasMore: PropTypes.bool.isRequired,
 };
