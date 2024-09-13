@@ -12,7 +12,10 @@ const redirectUri = process.env.REACT_APP_REDIRECT_URI || 'http://localhost:3000
 const scopes = [
   'user-top-read',
   'playlist-read-private',
-  'user-library-read'
+  'user-library-read',
+  'playlist-modify-public',
+  'playlist-modify-private',
+  'ugc-image-upload'
 ];
 
 const loginUrl = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
