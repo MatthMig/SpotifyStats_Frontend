@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Card, Col, Container, Row, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { rankTracks } from '../api_caller';
-import CommonLayout from '../components/generic/CommonLayout';
 import RankingOverview from '../components/RankingOverview';
+import CommonLayout from '../components/generic/CommonLayout';
 import '../styles/RankerPage.css';
 
 const SongsToRank = ({ songsToRank, layout, token, left, right, onCardClick }) => {
@@ -41,18 +41,20 @@ const SongsToRank = ({ songsToRank, layout, token, left, right, onCardClick }) =
         </Row>
     ) : (layout === 'wide' ? (
         <Col className='d-flex wide-songs-to-ranks-col'>
-            <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(0)}>
-                <Card.Body>
-                    <Card.Title>{songsToRank[0].name}</Card.Title>
-                    <Card.Text>{songsToRank[0].artists.map(artist => artist.name).join(', ')}</Card.Text>
-                </Card.Body>
-            </Card>
-            <Card className="mb-5 w-100 clickable-card" onClick={() => handleCardClick(1)}>
-                <Card.Body>
-                    <Card.Title>{songsToRank[1].name}</Card.Title>
-                    <Card.Text>{songsToRank[1].artists.map(artist => artist.name).join(', ')}</Card.Text>
-                </Card.Body>
-            </Card>
+            <div className="cards-container w-100">
+                <Card className="w-100 clickable-card-top" onClick={() => handleCardClick(0)}>
+                    <Card.Body>
+                        <Card.Title>{songsToRank[0].name}</Card.Title>
+                        <Card.Text>{songsToRank[0].artists.map(artist => artist.name).join(', ')}</Card.Text>
+                    </Card.Body>
+                </Card>
+                <Card className="w-100 clickable-card" onClick={() => handleCardClick(1)}>
+                    <Card.Body>
+                        <Card.Title>{songsToRank[1].name}</Card.Title>
+                        <Card.Text>{songsToRank[1].artists.map(artist => artist.name).join(', ')}</Card.Text>
+                    </Card.Body>
+                </Card>
+            </div>
         </Col>
     ) : null);
 };

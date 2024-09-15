@@ -1,7 +1,7 @@
 import 'bootstrap-icons/font/bootstrap-icons.css'; // Import Bootstrap Icons
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { LoadAnimation } from './LoadAnimation';
@@ -64,17 +64,15 @@ const MostPlayedItems = ({ timeRange, fetchFunction, renderItem, getTitle, showA
 
   return (
     <Container className="column-view">
-      <Row className="tile align-items-center no-padding no-margin">
-        <Col>
-          <h4 className="text-center text-light column-title">
-            {getTitle(timeRange)}
-          </h4>
-        </Col>
+      <div className="tile align-items-center no-margin">
+        <h4 className="text-center text-light column-title">
+          {getTitle(timeRange)}
+        </h4>
         {isSmallScreen && showArrow && (
           <Col xs="auto">
-            <Button 
-              variant="link" 
-              className="expand-button p-0" 
+            <Button
+              variant="link"
+              className="expand-button p-0"
               onClick={() => setIsExpanded(!isExpanded)}
               aria-expanded={isExpanded}
             >
@@ -82,7 +80,7 @@ const MostPlayedItems = ({ timeRange, fetchFunction, renderItem, getTitle, showA
             </Button>
           </Col>
         )}
-      </Row>
+      </div>
       {(!isSmallScreen || !showArrow || isExpanded) && (
         <div className="scrollable-div list-group">
           {items.map((item, index) => renderItem(item, index))}
